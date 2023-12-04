@@ -1,66 +1,55 @@
-fun main() {
+enum class Color(val text: String) {
+    RED("red"),
+    GREEN("green"),
+    BLUE("blue")
+}
 
-    fun List<String>.toGames(): List<Pair<Int, Map<String, MutableList<Int>>>> {
-        return map { line ->
+data class Draw(val red: Int, val green: Int, val blue: Int)
+data class Game(val id: Int, val draws: List<Draw>)
 
-            val colIndex = line.indexOf(":")
-            val gameId = line.substring(5, colIndex).toInt()
+fun main() = Day02().main()
 
-            val draws = line.substring(colIndex + 2).let { game ->
-                val counts = mapOf<String, MutableList<Int>>(
-                    "green" to mutableListOf(),
-                    "red" to mutableListOf(),
-                    "blue" to mutableListOf()
-                )
+class Day02 : Solution("Day02", "Day02_test", (8 to 2286)) {
+    override fun part1(input: List<String>): Int {
+        return input.parseGames().filter { game -> game.draws.all { it.isPossible() } }
+                .sumOf { it.id }
+    }
 
-                game.split("; ").map {
-                    buildMap {
-                        it.split(", ").forEach { count ->
-                            val (amount, color) = count.split(" ")
-                            set(color, amount.toInt())
-                        }
-                    }
-                }.forEach { draw ->
-                    draw.forEach { (color, count) ->
-                        counts[color]?.add(count)
-                    }
-                }
-
-                counts
-            }
-
-            return@map (gameId to draws)
+    override fun part2(input: List<String>): Int {
+        return input.parseGames().sumOf { game ->
+            game.max { it.red } * game.max { it.green } * game.max { it.blue }
         }
     }
 
-    fun part1(input: List<String>): Int {
-        return input.toGames().map { (gameId, draws) ->
-            (gameId to draws.map { (color, counts) ->
-                (color to counts.max())
-            }.toMap())
-        }.filter { (_, counts) ->
-            counts["red"]!! <= 12
-                    && counts["green"]!! <= 13
-                    && counts["blue"]!! <= 14
-        }.sumOf { (id, _) -> id }
+    private fun Map<Color, Int>.toDraw(): Draw {
+        return Draw(
+                get(Color.RED) ?: 0,
+                get(Color.GREEN) ?: 0,
+                get(Color.BLUE) ?: 0
+        )
     }
 
+    private fun List<String>.parseGames(): List<Game> {
+        return map { line ->
+            val colIndex = line.indexOf(":")
+            val gameId = line.substring(5, colIndex).toInt()
 
-    fun part2(input: List<String>): Int {
-        return input.toGames().map { (_, draws) ->
-            draws.map { (_, counts) -> counts.max() }
-        }.sumOf { it.reduce { a, b -> a * b } }
+            val draws = line.substring(colIndex + 2).let { drawsText ->
+                drawsText.split("; ").map { drawText ->
+                    drawText.split(", ").associate { colorCount ->
+                        val (count, color) = colorCount.split(" ")
+                        Color.entries.first { it.text == color } to count.toInt()
+                    }.toDraw()
+                }
+            }
+
+            Game(gameId, draws)
+        }
     }
 
-    readInput("Day02_test").let {
-        part1(it).println()
-        part2(it).println()
-    }
+    private fun Game.max(color: (Draw) -> Int) =
+            draws.maxOf(color)
 
-    readInput("Day02").let {
-        part1(it).println()
-        part2(it).println()
-    }
+    private fun Draw.isPossible() =
+            red <= 12 && green <= 13 && blue <= 14
 }
-
-

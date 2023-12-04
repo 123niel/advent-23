@@ -1,50 +1,34 @@
-fun main() {
-    val stringIntMap = mapOf(
-        "one" to 1,
-        "two" to 2,
-        "three" to 3,
-        "four" to 4,
-        "five" to 5,
-        "six" to 6,
-        "seven" to 7,
-        "eight" to 8,
-        "nine" to 9,
-        "zero" to 0
-    )
+fun main() = Day01().main()
 
-
-    fun String.wordToDigitOrNull(): Int? {
-        for ((word, digit) in stringIntMap) {
-            if (startsWith(word)) {
-                return digit
-            }
-        }
-        return null
+class Day01 : Solution("Day01", "Day01_test", (142 to 281)) {
+    override fun part1(input: List<String>): Int {
+        return input.asSequence()
+                .map { line ->
+                    buildList {
+                        for (ch in line) {
+                            ch.digitToIntOrNull()?.let(::add)
+                        }
+                    }
+                }.map { it.first() * 10 + it.last() }.sum()
     }
 
-    fun part1(input: List<String>): Int = input.asSequence()
-        .map { line ->
-            buildList {
-                for (ch in line) {
-                    ch.digitToIntOrNull()?.let(::add)
-                }
-            }
-        }.map { it.first() * 10 + it.last() }.sum()
-
-    fun part2(input: List<String>): Int =
-        input.asSequence().map { line ->
+    override fun part2(input: List<String>): Int {
+        return input.asSequence().map { line ->
             buildList {
                 for (i in line.indices) {
                     (line[i].digitToIntOrNull() ?: line.substring(i).wordToDigitOrNull())?.let(::add)
                 }
             }
         }.map { it.first() * 10 + it.last() }.sum()
+    }
 
-    val testInput = readInput("Day01_test")
-    check(part1(testInput) == 142)
-    check(part2(readInput("Day01_test2")) == 281)
-
-    val input = readInput("Day01")
-    part1(input).println()
-    part2(input).println()
+    private val digitWords = listOf("one", "zero", "two", "three", "four", "five", "six", "seven", "eight", "nine")
+    private fun String.wordToDigitOrNull(): Int? {
+        digitWords.forEachIndexed { digit, word ->
+            if (startsWith(word)) {
+                return digit
+            }
+        }
+        return null
+    }
 }
