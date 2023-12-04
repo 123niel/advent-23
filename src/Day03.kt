@@ -26,14 +26,11 @@ fun main() {
         get(x)[y] = value
     }
 
-    fun IntRange.coerceIn(min: Int, max: Int) =
-        start.coerceAtLeast(min)..endInclusive.coerceAtMost(max)
-
     fun findNumbers(input: List<String>, counted: List<MutableList<Boolean>>, x: Int, y: Int): List<Int> {
         val numbers = mutableListOf<Int>()
 
-        val xs = (x - 1..x + 1).coerceIn(0, input.first().length - 1)
-        val ys = (y - 1..y + 1).coerceIn(0, input.size - 1)
+        val xs = (x - 1..x + 1).boundTo(0, input.first().length - 1)
+        val ys = (y - 1..y + 1).boundTo(0, input.size - 1)
 
         for (i in xs) {
             for (j in ys) {
