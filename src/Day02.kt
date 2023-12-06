@@ -1,15 +1,18 @@
-enum class Color(val text: String) {
-    RED("red"),
-    GREEN("green"),
-    BLUE("blue")
-}
 
-data class Draw(val red: Int, val green: Int, val blue: Int)
-data class Game(val id: Int, val draws: List<Draw>)
 
 fun main() = Day02().main()
 
 class Day02 : Solution("Day02", "Day02_test", (8 to 2286)) {
+
+    enum class Color(val text: String) {
+        RED("red"),
+        GREEN("green"),
+        BLUE("blue")
+    }
+
+    data class Draw(val red: Int, val green: Int, val blue: Int)
+    data class Game(val id: Int, val draws: List<Draw>)
+
     override fun part1(input: List<String>): Int {
         return input.parseGames().filter { game -> game.draws.all { it.isPossible() } }
                 .sumOf { it.id }
