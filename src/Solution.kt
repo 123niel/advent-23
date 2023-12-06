@@ -1,6 +1,6 @@
 abstract class Solution(private val file: String,
                         private val testFile: String? = null,
-                        private val testSolutions: Pair<Int, Int>? = null) {
+                        private val testSolutions: Pair<Number, Number>? = null) {
 
     fun main() {
         if (testFile != null && testSolutions != null) {
@@ -16,6 +16,6 @@ abstract class Solution(private val file: String,
         "Part 1: ${part2(input)}".println()
     }
 
-    abstract fun part1(input: List<String>): Int
-    abstract fun part2(input: List<String>): Int
+    abstract fun part1(input: List<String>): Number
+    abstract fun part2(input: List<String>): Number
 }
