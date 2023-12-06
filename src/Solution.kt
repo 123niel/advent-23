@@ -1,3 +1,6 @@
+import kotlin.time.Duration
+import kotlin.time.measureTimedValue
+
 abstract class Solution(private val file: String,
                         private val testFile: String? = null,
                         private val testSolutions: Pair<Number, Number>? = null) {
@@ -6,14 +9,19 @@ abstract class Solution(private val file: String,
         if (testFile != null && testSolutions != null) {
             val input = readInput(testFile)
             "Test Input".println()
-            "Part 1: ${part1(input)} should be ${testSolutions.first}".println()
-            "Part 1: ${part2(input)} should be ${testSolutions.second}".println()
+
+            val (value1, time1) = measureTimedValue { part1(input) }
+            "Part 1: $value1 should be ${testSolutions.first} (${time1.inWholeMilliseconds}ms)".println()
+            val (value2, time2) = measureTimedValue { part2(input) }
+            "Part 2: $value2 should be ${testSolutions.second} (${time2.inWholeMilliseconds}ms)".println()
         }
 
         val input = readInput(file)
         "Input".println()
-        "Part 1: ${part1(input)}".println()
-        "Part 1: ${part2(input)}".println()
+        val (value1, time1) = measureTimedValue { part1(input) }
+        "Part 1: $value1 (${time1.inWholeMilliseconds}ms)".println()
+        val (value2, time2) = measureTimedValue { part2(input) }
+        "Part 2: $value2 (${time2.inWholeMilliseconds}ms)".println()
     }
 
     abstract fun part1(input: List<String>): Number
