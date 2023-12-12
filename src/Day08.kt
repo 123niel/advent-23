@@ -1,8 +1,29 @@
 fun main() {
-    Day08().main()
+    Day08.main()
 }
 
-class Day08 : Solution("Day08", null, (2 to 6)) {
+object Day08 : Solution {
+    override fun main() {
+        readInput("Day08").let { input ->
+            val (directions, nodes) = input.parse()
+            checkWithTimer("Part 1", 13939) {
+
+                traverse(start = "AAA",
+                        nodes = nodes,
+                        directions = directions,
+                        stopCondition = { it == "ZZZ" })
+            }
+
+            checkWithTimer("Part 2", 8906539031197) {
+                nodes.keys.filter { it.endsWith("A") }.map { node ->
+                    traverse(start = node,
+                            nodes = nodes,
+                            directions = directions,
+                            stopCondition = { it.endsWith("Z") }).toLong()
+                }.reduceRight(::findLCM)
+            }
+        }
+    }
 
     private fun List<String>.parse(): Pair<String, Map<String, Pair<String, String>>> {
         val instructions = first()
@@ -16,10 +37,10 @@ class Day08 : Solution("Day08", null, (2 to 6)) {
         }
     }
 
-    private fun solve(start: String,
-                      nodes: Map<String, Pair<String, String>>,
-                      directions: String,
-                      stopCondition: (String) -> Boolean): Int {
+    private fun traverse(start: String,
+                         nodes: Map<String, Pair<String, String>>,
+                         directions: String,
+                         stopCondition: (String) -> Boolean): Int {
         var i = 0
         var node = start
 
@@ -34,15 +55,6 @@ class Day08 : Solution("Day08", null, (2 to 6)) {
         return i
     }
 
-    override fun part1(input: List<String>): Number {
-        val (directions, nodes) = input.parse()
-
-        return solve(start = "AAA",
-                nodes = nodes,
-                directions = directions,
-                stopCondition = { it == "ZZZ" })
-    }
-
     private fun findLCM(a: Long, b: Long): Long {
         val larger = if (a > b) a else b
         val maxLcm = a * b
@@ -54,16 +66,5 @@ class Day08 : Solution("Day08", null, (2 to 6)) {
             lcm += larger
         }
         return maxLcm
-    }
-
-    override fun part2(input: List<String>): Number {
-        val (instructions, nodes) = input.parse()
-
-        return nodes.keys.filter { it.endsWith("A") }.map { node ->
-            solve(start = node,
-                    nodes = nodes,
-                    directions = instructions,
-                    stopCondition = { it.endsWith("Z") }).toLong()
-        }.reduceRight(::findLCM)
     }
 }

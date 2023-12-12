@@ -1,48 +1,33 @@
 fun main() {
-     Day09().main()
-   // Day09().part2(readInput("Day09_test")).println()
+    Day09.main()
 }
 
-class Day09 : Solution("Day09", "Day09_test", (114 to 2)) {
+object Day09 : Solution("Day09", "Day09_test", (114 to 2)) {
 
     private fun List<String>.parse(): List<List<Int>> {
         return map { line -> line.split(" ").map { it.toInt() } }
     }
 
     private fun List<Int>.differences(): List<Int> {
-        return (1..<size).map { get(it) - get(it - 1) }
+        return zipWithNext().map { (a, b) -> b - a }
     }
 
-    private fun List<Int>.extrapolate(): Int {
+    private tailrec fun List<Int>.extrapolate(acc: Int = 0): Int {
         val diffs = differences()
         return if (diffs.all { it == 0 }) {
-            last()
+            last() + acc
         } else {
-            last() + diffs.extrapolate()
+            diffs.extrapolate(acc + last())
         }
     }
-    
-    private fun List<Int>.extrapolateFront(): Int {
-        val diffs = differences()
-        return if (diffs.all { it == 0 }) {
-            first()
-        } else {
-            first() - diffs.extrapolateFront()
-        }
-    }
+
     override fun part1(input: List<String>): Number {
-
         return input.parse()
-                .sumOf { history ->
-                    history.extrapolate()
-                }
-
+                .sumOf { it.extrapolate() }
     }
 
     override fun part2(input: List<String>): Number {
-             return input.parse()
-            .sumOf { history ->
-                history.extrapolateFront()
-            }
+        return input.parse()
+                .sumOf { it.reversed().extrapolate() }
     }
 }
