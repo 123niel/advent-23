@@ -14,7 +14,7 @@ object Day12 : Solution() {
 
     private val cache = mutableMapOf<Row, Long>()
     private fun cached(row: Row, res: Long): Long {
-        cache[row] = res;
+        cache[row] = res
         return res
     }
 
@@ -64,40 +64,41 @@ object Day12 : Solution() {
         }
     }
 
+    override fun part1(input: List<String>): Long {
+        return input.parse()
+                .map { row -> possibillities(row.springs, row.groupSizes) }
+                .sum()
+    }
+
+    override fun part2(input: List<String>): Long {
+        return input.parse()
+                .map { it.unfold() }
+                .map { row -> possibillities(row.springs, row.groupSizes) }
+                .sum()
+    }
+
     override fun main() {
         readInput("Day12_test").let { input ->
             checkWithTimer("Test Input P1", 21) {
-                input.parse()
-                        .map { row -> possibillities(row.springs, row.groupSizes) }
-                        .sum()
+                part1(input)
             }
 
             checkWithTimer("Test Input P2", 525152) {
-                input.parse()
-                        .map { it.unfold() }
-                        .map { row -> possibillities(row.springs, row.groupSizes) }
-                        .sum()
+                part2(input)
             }
 
         }
-
-
         println("")
-
         readInput("Day12").let { input ->
             checkWithTimer("Main Input p1", 7007) {
-                input.parse()
-                        .map { row -> possibillities(row.springs, row.groupSizes) }
-                        .sum()
+                part1(input)
+
             }
             checkWithTimer("Main Input P2", 3476169006222) {
-                input.parse()
-                        .map { it.unfold() }
-                        .map { row -> possibillities(row.springs, row.groupSizes).toLong() }
-                        .sum()
+                part2(input)
             }
-        }
 
+        }
     }
 
 
