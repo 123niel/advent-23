@@ -24,24 +24,4 @@ abstract class Solution(private val file: String? = null,
     open fun part1(input: List<String>): Number = 0
     open fun part2(input: List<String>): Number = 0
 
-    protected fun withTimer(msg: String, block: () -> Number) {
-        val (value, time) = measureTimedValue { block() }
-
-        val timeStr = "${time.inWholeMilliseconds}ms".cyan()
-        println("$msg\t$timeStr\t$value")
-    }
-
-    protected fun checkWithTimer(msg: String, expected: Number, block: () -> Number) {
-        val (value, time) = measureTimedValue { block() }
-
-        val passed = value.toDouble() == expected.toDouble()
-
-        val timeInMs = "${time.inWholeMilliseconds}ms".cyan()
-
-        val valueStr =
-                if (passed) "✅ $value".green()
-                else "❌ $value should be $expected".red()
-
-        println("$msg\t$timeInMs\t$valueStr")
-    }
 }

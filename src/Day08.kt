@@ -2,7 +2,7 @@ fun main() {
     Day08.main()
 }
 
-object Day08 : Solution {
+object Day08 : Solution() {
     override fun main() {
         readInput("Day08").let { input ->
             val (directions, nodes) = input.parse()
