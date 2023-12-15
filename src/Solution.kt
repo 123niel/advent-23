@@ -11,10 +11,10 @@ abstract class Solution(private val file: String? = null,
             checkWithTimer("Test Input Part 2", testSolutions.second) { part2(input) }
         }
 
+        "".println()
+
         file?.let {
             val input = readInput(it)
-
-            "".println()
             withTimer("Main Input Part 1") { part1(input) }
             withTimer("Main Input Part 2") { part2(input) }
         }
