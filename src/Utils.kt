@@ -8,3 +8,9 @@ data class Vec<T : Number>(val x: T, val y: T)
 
 operator fun List<String>.get(x: Int, y: Int) = get(y)[x]
 operator fun <T : Number> List<String>.get(vec: Vec<T>) = get(vec.y.toInt(), vec.x.toInt())
+
+
+fun List<String>.transpose(): List<String> {
+    return first().indices.map { i -> this.map { line -> line[i] } }
+            .map { it.joinToString("") }
+}

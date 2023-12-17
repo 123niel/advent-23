@@ -6,11 +6,6 @@ fun main() {
 
 object Day13 : Solution() {
 
-    private fun List<String>.transpose(): List<String> {
-        return first().indices.map { i -> this.map { line -> line[i] } }
-                .map { it.joinToString("") }
-    }
-
     private fun String.difference(other: String): Int {
         return indices.count { i -> this[i] != other[i] }
     }
