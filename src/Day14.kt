@@ -108,9 +108,9 @@ object Day14 : Solution() {
         val n = 1_000_000_000
         for (i in 1..n) {
             field.cycle()
-            
+
             val j = cache.getOrPut(field.copy()) { i }
-           
+
             if (j != i) {
                 val x = j + (n - i) % (i - j)
                 return cache.map { it.key }[x].map { it.toCharArray() }.load()
