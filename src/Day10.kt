@@ -6,14 +6,7 @@ fun main() {
 
 object Day10 : Solution("Day10", "Day10_test", (8 to 0)) {
 
-    enum class Direction { N, E, S, W }
-
-    private fun Vec<Int>.north() = Vec(x, y - 1)
-    private fun Vec<Int>.east() = Vec(x + 1, y)
-    private fun Vec<Int>.south() = Vec(x, y + 1)
-    private fun Vec<Int>.west() = Vec(x - 1, y)
-
-    private fun Vec<Int>.walk(d: Direction, input: List<String>): Pair<Vec<Int>, Char> {
+    private fun Vec.walk(d: Direction, input: List<String>): Pair<Vec, Char> {
         val next = when (d) {
             Direction.E -> east()
             Direction.N -> north()
@@ -24,7 +17,7 @@ object Day10 : Solution("Day10", "Day10_test", (8 to 0)) {
     }
 
 
-    private fun List<String>.findStart(): Vec<Int> {
+    private fun List<String>.findStart(): Vec {
         forEachIndexed { i, line ->
             val pos = line.indexOf('S')
             if (pos != -1) {
@@ -34,7 +27,7 @@ object Day10 : Solution("Day10", "Day10_test", (8 to 0)) {
         error("Couldn't find start")
     }
 
-    private fun Vec<Int>.scanForPipes(input: List<String>): Direction {
+    private fun Vec.scanForPipes(input: List<String>): Direction {
 
         return if (input[north()] in "|7F") {
             Direction.N
@@ -47,7 +40,7 @@ object Day10 : Solution("Day10", "Day10_test", (8 to 0)) {
         }
     }
 
-    private fun List<String>.findPipeLoop(): List<Vec<Int>> {
+    private fun List<String>.findPipeLoop(): List<Vec> {
         val start = findStart()
         var dir = start.scanForPipes(this)
         val list = mutableListOf(start)

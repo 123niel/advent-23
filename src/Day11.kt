@@ -41,7 +41,7 @@ object Day11 : Solution("Day11", "Day11_test", (374 to 1030)) {
 
     }
 
-    private fun List<String>.findGalaxies(): List<Vec<Long>> {
+    private fun List<String>.findGalaxies(): List<Vec> {
         return buildList {
             this@findGalaxies.forEachIndexed { y, line ->
                 line.forEachIndexed { x, c ->
@@ -78,7 +78,5 @@ object Day11 : Solution("Day11", "Day11_test", (374 to 1030)) {
             flatMapIndexed { i1, v1 ->
                 filterIndexed { i, _ -> i > i1 }.map { v2 -> v1 to v2 }
             }
-
-    private fun Pair<Vec<Long>, Vec<Long>>.distance(): Long =
-            abs(first.x - second.x) + abs(first.y - second.y)
+ 
 }
