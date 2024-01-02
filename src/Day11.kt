@@ -1,4 +1,3 @@
-import kotlin.math.abs
 
 fun main() {
     Day11.main()

@@ -46,17 +46,17 @@ fun Direction.right() = when(this) {
     Direction.S -> Direction.W
 }
 
-fun Vec.north() = Vec(x, y - 1)
-fun Vec.east() = Vec(x + 1, y)
-fun Vec.south() = Vec(x, y + 1)
-fun Vec.west() = Vec(x - 1, y)
+fun Vec.north(n: Int = 1) = Vec(x, y - n)
+fun Vec.east(n: Int = 1) = Vec(x + n, y)
+fun Vec.south(n: Int = 1) = Vec(x, y + n)
+fun Vec.west(n: Int = 1) = Vec(x - n, y)
 
-fun Vec.neighbour(dir: Direction): Vec {
+fun Vec.neighbour(dir: Direction, n: Int = 1): Vec {
     return when (dir) {
-        Direction.E -> east()
-        Direction.N -> north()
-        Direction.W -> west()
-        Direction.S -> south()
+        Direction.E -> east(n)
+        Direction.N -> north(n)
+        Direction.W -> west(n)
+        Direction.S -> south(n)
     }
 }
 
