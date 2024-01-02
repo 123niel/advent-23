@@ -83,14 +83,6 @@ inline infix fun <reified T> Vec.isIn(grid: List<T>) = when (T::class) {
 infix fun Vec.isIn(grid: Array<IntArray>) = x in grid.first().indices && y in grid.indices
 
 
-inline infix fun <reified T> ComplexInt.isIn(grid: List<T>) = when (T::class) {
-    String::class -> real in (grid.first() as String).indices && img in grid.indices
-    List::class -> real in (grid.first() as List<*>).indices && img in grid.indices
-    else -> error("not a grid")
-}
-infix fun ComplexInt.isIn(grid: Array<IntArray>) = real in grid.first().indices && img in grid.indices
-
-
 fun Pair<Vec, Vec>.distance(): Long =
         abs(first.x - second.x) + abs(first.y - second.y)
 
