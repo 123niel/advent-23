@@ -7,12 +7,16 @@ fun IntRange.boundTo(min: Int? = null, max: Int? = null): IntRange {
 }
 
 data class Vec(val x: Long, val y: Long) {
+
     constructor(x: Int, y: Int) : this(x.toLong(), y.toLong())
 }
 
 operator fun List<String>.get(x: Int, y: Int) = get(y)[x]
 operator fun List<String>.get(vec: Vec) = get(vec.x.toInt(), vec.y.toInt())
+operator fun <T> List<List<T>>.get(x: Int, y: Int) = this[y][x]
+operator fun <T> List<List<T>>.get(vec: Vec) = this[vec.x.toInt(), vec.y.toInt()]
 
+operator fun Array<IntArray>.get(vec: Vec) = this[vec.y.toInt()][vec.x.toInt()]
 
 fun List<String>.transpose(): List<String> {
     return first().indices.map { i -> this.map { line -> line[i] } }
@@ -20,6 +24,27 @@ fun List<String>.transpose(): List<String> {
 }
 
 enum class Direction { N, E, S, W }
+
+fun Direction.flip() = when (this) {
+    Direction.E -> Direction.W
+    Direction.N -> Direction.S
+    Direction.W -> Direction.E
+    Direction.S -> Direction.N
+}
+
+fun Direction.left() = when(this) {
+    Direction.E -> Direction.N
+    Direction.N -> Direction.W
+    Direction.W -> Direction.S
+    Direction.S -> Direction.E
+}
+
+fun Direction.right() = when(this) {
+    Direction.E -> Direction.S
+    Direction.N -> Direction.E
+    Direction.W -> Direction.N
+    Direction.S -> Direction.W
+}
 
 fun Vec.north() = Vec(x, y - 1)
 fun Vec.east() = Vec(x + 1, y)
@@ -49,7 +74,22 @@ fun Vec.neighboursMap(): Map<Direction, Vec> = mapOf(
     Direction.S to south()
 )
 
-infix fun Vec.isIn(grid: List<String>) = x in grid.first().indices && y in grid.indices
+inline infix fun <reified T> Vec.isIn(grid: List<T>) = when (T::class) {
+    String::class -> x in (grid.first() as String).indices && y in grid.indices
+    List::class -> x in (grid.first() as List<*>).indices && y in grid.indices
+    else -> error("not a grid")
+}
+
+infix fun Vec.isIn(grid: Array<IntArray>) = x in grid.first().indices && y in grid.indices
+
+
+inline infix fun <reified T> ComplexInt.isIn(grid: List<T>) = when (T::class) {
+    String::class -> real in (grid.first() as String).indices && img in grid.indices
+    List::class -> real in (grid.first() as List<*>).indices && img in grid.indices
+    else -> error("not a grid")
+}
+infix fun ComplexInt.isIn(grid: Array<IntArray>) = real in grid.first().indices && img in grid.indices
+
 
 fun Pair<Vec, Vec>.distance(): Long =
         abs(first.x - second.x) + abs(first.y - second.y)
