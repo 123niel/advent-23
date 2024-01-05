@@ -2,8 +2,6 @@ fun main() {
     Day19.main()
 }
 
-typealias CategoryRatings = Map<String, IntRange>
-
 object Day19 : Solution() {
 
     data class PartRange(val x: IntRange, val m: IntRange, val a: IntRange, val s: IntRange) {
