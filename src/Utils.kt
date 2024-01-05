@@ -88,3 +88,16 @@ fun Pair<Vec, Vec>.distance(): Long =
 
 fun Vec.distance(other: Vec): Long =
         abs(this.x - other.x) + abs(this.y - other.y)
+
+fun <K, V> Map<K, V>.add(key: K, value: V) = buildMap {
+    putAll(this@add)
+    put(key, value)
+}
+
+fun IntRange.split(intPredicate: (Int) -> Boolean): Pair<IntRange, IntRange> =
+    this.partition(intPredicate).let { (yes, no) ->
+        yes.toRange() to no.toRange()
+    }
+
+fun List<Int>.toRange(): IntRange = if (isEmpty()) IntRange.EMPTY else min()..max()
+
